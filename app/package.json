@@ -13,7 +13,9 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@maptiler/sdk": "^1.2.0",
     "@popperjs/core": "^2.11.6",
+    "axios": "^1.6.2",
     "bootstrap": "^5.2.2",
     "bootstrap-vue-3": "^0.3.11",
     "vue": "^3.2.37"
