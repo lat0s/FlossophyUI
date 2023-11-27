@@ -17,7 +17,9 @@ const app = createApp(App)
 app.use(BootstrapVue3)
 
 // Define your routes here
+import Test from './components/Test.vue'
 const routes = [
+   { path: '/hello', component: Test}
   // { path: '/example', component: ExampleComponent }
 ]
 
