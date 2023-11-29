@@ -37,17 +37,19 @@ const submitForm = () => {
 
 <style scoped>
 .registration-container {
-  background-color: #9ac5fd;
-  box-shadow: 0 0 10px #2d2ac76f;
-  padding: 50px;
-  border-radius: 10px;
-  width: 400px;
+  background-color: rgba(255, 255, 255, 0.87); /* Match login form background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Match login form shadow */
+  padding: 20px; /* Adjust padding to match login form */
+  border-radius: 4px; /* Match login form border-radius */
+  width: 300px; /* Match login form width */
   margin: auto;
+  text-align: center;
 }
 
 .registration-container h2 {
-  text-align:center;
-  color: #333;
+  font-size: 2em; /* Match login form title size */
+  margin-bottom: 20px;
+  color: #333; /* Match login form title color */
 }
 
 .registration-form {
@@ -68,25 +70,32 @@ label {
 
 input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #dee0e3;
-  border-radius: 4px;
-  box-sizing: border-box;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc; /* Match login form input border */
+  border-radius: 4px; /* Match login form input border-radius */
   background-color: #fff;
   color: #333;
 }
 
 button {
-  background-color: #1071e5;
-  color: #fff;
+  width: 100%;
   padding: 10px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  background-color: #9ac5fd; /* Match login form button color */
+  color: white;
   font-size: 16px;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #45a049; /* Optional: Match login form button hover effect */
 }
+
+@media (max-width: 768px) {
+  .registration-container {
+    width: 100%; /* Responsive adjustment */
+  }
+}
+
 </style>

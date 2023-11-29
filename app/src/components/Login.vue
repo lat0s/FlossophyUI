@@ -1,28 +1,62 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import axios, { AxiosError } from 'axios';
 
-const email = ref('');
-const password = ref('');
-const errorMessage = ref('');
 
-const toggleLogin = async () => {
- 
-};
-</script> 
+  const name = ref('');
+  const password = ref('');
+  const errorMessage = ref('');
+  const router = useRouter();
+  const successMessage = ref(''); 
+
+  const toggleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', {
+        name: name.value,
+        password: password.value,
+      });
+      
+      if (response.data.Authorization === "1") {
+        successMessage.value = 'Login successful!';
+        errorMessage.value = '';
+        router.push('/home');
+      }else {
+        successMessage.value = '';
+        alert('Invalid login credentials'); 
+      }
+    } catch (error) {
+        successMessage.value = '';
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+         const errorData = axiosError.response.data as { message?: string };
+          alert(errorData.message || 'An error occurred'); 
+        } else if (axiosError.request) {
+             alert('No response from server'); 
+        } else {
+       alert('Error: ' + axiosError.message);
+       }
+      }
+  };
+
+  const navigateToRegister = () => {
+    router.push('/registration');
+  };
+</script>
 
 <template>
   <div class="split-screen">
     <div class="left-pane">
       <div class="login-container">
-       
         <h1 class="title">Sign in</h1>
-
+        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <b-form @submit.prevent="toggleLogin" class="login-form">
           <b-form-input
-            id="email"
-            v-model="email"
+            id="name"
+            v-model="name"
             required
-            placeholder="Email"
+            placeholder="Name"
             class="input-field"
           ></b-form-input>
 
@@ -34,16 +68,12 @@ const toggleLogin = async () => {
             placeholder="Password"
             class="input-field"
           ></b-form-input>
-
           <b-button type="submit" variant="primary" class="login-button">
             Login
           </b-button>
         </b-form>
-
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <div class="register-link">
-          Register
-        </div>
+        <div class="register-link" @click="navigateToRegister">Register</div>
       </div>
     </div>
     <div class="right-pane"></div>
@@ -102,6 +132,10 @@ const toggleLogin = async () => {
   background-color:#9ac5fd;
   color: white;
 }
+
+.success-message {
+  color: #28a745; 
+  margin-top: 10px;}
 
 .error-message {
   color: #ff0000;
