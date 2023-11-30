@@ -1,15 +1,7 @@
 <template>
+  <BModal v-model="modal" title="Hello, World!"> Foobar? </BModal>
   <div class="map-wrap">
-    <div class="map" ref="mapContainer"></div>
-    <b-modal class="modal" v-model="modalShow" title="Clinic Details">
-      <!-- Modal content -->
-      <div class="px-3 py-2">
-        <p v-if="currentDentistry"><strong>Name:</strong> {{ currentDentistry.name }}</p>
-        <p v-if="currentDentistry"><strong>Address:</strong> {{ currentDentistry.address }}</p>
-        <b-button class="booking-button">{{currentDentistry.name}}'s booking page. </b-button>
-
-      </div>
-    </b-modal>
+  <div class="map" ref="mapContainer"></div>
   </div>
 </template>
 
@@ -20,11 +12,25 @@ import '@maptiler/sdk/dist/maptiler-sdk.css';
 
 import customMarkerIcon from '@/assets/marker.png';
 
-
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
-const modalShow = ref(false);
+const modal = ref(false);
+
 const currentDentistry = ref(null);
+
+
+
+const zoomToDentistry = (dentistry) => {
+  if (map.value) {
+    map.value.flyTo({
+      center: [dentistry.lng, dentistry.lat],
+      essential: true,
+      zoom: 17
+    });
+    currentDentistry.value = dentistry;
+    modalShow.value = true;
+  }
+};
 
 // TEST
 const dentistryTestData = [
@@ -92,7 +98,7 @@ onMounted(() => {
 
     marker.getElement().addEventListener('click', () => {
       currentDentistry.value = dentistry;
-      modalShow.value = true; // Open the modal
+      modal.value = true; // Open the modal
     });
   });
 });
@@ -119,8 +125,19 @@ onUnmounted(() => {
   height: calc(100vh - 77px);
 }
 
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+
 .map {
-  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -131,15 +148,15 @@ onUnmounted(() => {
   border: 1px solid black;
   text-align: center;
   position: absolute;
-  top: -25px; /* Adjust as necessary */
+  top: -25px; 
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
 }
 
 .custom-marker-icon {
-  width: 80px; /* Adjust size as necessary */
-  height: 80px; /* Adjust size as necessary */
+  width: 80px; 
+  height: 80px; 
 }
 
 
