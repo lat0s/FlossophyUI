@@ -96,7 +96,7 @@ const dentistryTestData = [
   {
     id: 3,
     name: "Dentistry C",
-    lng: 11.974560,
+    lng: 11.924510,
     lat: 57.708870,
     address: "Mejerigatan 20, 41616 Göteborg"
   }
