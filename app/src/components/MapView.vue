@@ -149,11 +149,11 @@ onUnmounted(() => {
   height: 100%; /* Full height of the map area */
   width: 250px; /* Or whatever width you prefer */
   z-index: 5; /* Below the button but above the map */
-  background-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(7.7px);
-  -webkit-backdrop-filter: blur(7.7px);
-  border: 1px solid rgba(255, 255, 255, 0.68);
+  background-color: rgba(255, 255, 255, 0.5)!important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)!important;
+  backdrop-filter: blur(7.7px)!important;
+  -webkit-backdrop-filter: blur(7.7px)!important;
+  border: 1px solid rgba(255, 255, 255, 0.68)!important;
 }
 
 .map-button {
