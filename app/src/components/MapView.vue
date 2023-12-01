@@ -7,17 +7,26 @@
   </BModal>
   <div class="map-wrap"> <!-- Map Wrap -->
     <BButton @click="click" class="map-button m-2">☰</BButton> <!-- Side Bar Button -->
-    <BOffcanvas v-model="show" :placement="placement" :backdrop="false" no-close-on-backdrop class="sidebar"> <!-- Side Bar -->
-      <p> Test</p>
-    </BOffcanvas>
+    <BOffcanvas v-model="show" :placement="placement" :backdrop="false" no-close-on-backdrop class="sidebar" title="Available Clinics">
+    <!-- Search Input -->
+    <BFormInput v-model="searchTerm" placeholder="Search clinics..." class="mb-3"/>
+    <!-- List of dentistry clinics -->
+    <ul>
+      <li v-for="dentistry in filteredDentistryList" :key="dentistry.id" @click="selectDentistry(dentistry)" class="dentistry-item">
+        {{ dentistry.name }} - {{ dentistry.address }}
+        <div v-if="isLoggedIn" class="distance-text">{{ distanceToDentistry(dentistry) }} KM Away</div>
+      </li>
+    </ul>
+  </BOffcanvas>
   <div class="map" ref="mapContainer"></div> <!-- Map -->
   </div>
 </template>
 
 <script setup>
 import { Map, MapStyle, Marker, config } from '@maptiler/sdk';
-import { shallowRef, onMounted, onUnmounted, ref } from 'vue';
+import { shallowRef, onMounted, onUnmounted, ref, computed } from 'vue';
 import '@maptiler/sdk/dist/maptiler-sdk.css';
+import { calculateDistance } from '@/helpers/mapHelper.js';
 
 import customMarkerIcon from '@/assets/marker.png';
 
@@ -27,6 +36,13 @@ const modal = ref(false);
 
 const show = ref(false)
 const placement = ref('start')
+const searchTerm = ref('');
+
+const userCoordinates = { lat: 57.708870, lng: 11.974560 }; // REPLACE WITH REST VALUES!!!!!
+
+const distanceToDentistry = (dentistry) => {
+  return calculateDistance(userCoordinates.lat, userCoordinates.lng, dentistry.lat, dentistry.lng);
+};
 
 const click = (place = 'start') => {
   placement.value = place
@@ -35,7 +51,18 @@ const click = (place = 'start') => {
 
 const currentDentistry = ref(null);
 
+const filteredDentistryList = computed(() => {
+  return dentistryTestData.filter((dentistry) =>
+    dentistry.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+    dentistry.address.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 
+
+const selectDentistry = (dentistry) => {
+  currentDentistry.value = dentistry;
+  zoomToDentistry(dentistry);
+};
 
 const zoomToDentistry = (dentistry) => {
   if (map.value) {
@@ -45,44 +72,44 @@ const zoomToDentistry = (dentistry) => {
       zoom: 17
     });
     currentDentistry.value = dentistry;
-    modalShow.value = true;
+    show.value = true;
   }
 };
 
-// TEST
+// TEST 
+// REPLACE WITH REST VALUES!!!!!
 const dentistryTestData = [
   {
     id: 1,
     name: "Dentistry A",
-    lng: 11.964560 + Math.random() * 0.01,
-    lat: 57.708870 + Math.random() * 0.01,
+    lng: 12.964560,
+    lat: 57.708870,
     address: "Postgatan 9, 41616 Göteborg"
   },
   {
     id: 2,
     name: "Dentistry B",
-    lng: 11.984560 + Math.random() * 0.01,
-    lat: 57.708870 + Math.random() * 0.01,
+    lng: 11.984560,
+    lat: 57.708870,
     address: "Burgrevegatan 12, 41616 Göteborg"
   },
   {
     id: 3,
     name: "Dentistry C",
-    lng: 11.974560 + Math.random() * 0.01,
-    lat: 57.708870 + Math.random() * 0.01,
+    lng: 11.974560,
+    lat: 57.708870,
     address: "Mejerigatan 20, 41616 Göteborg"
   }
 ];
 
 
-
-
+const isLoggedIn = true;
 
 
 
 onMounted(() => {
   config.apiKey = '3El17jYpkRdshALvcdOY';
-  const initialState = { lng: 11.974560, lat: 57.708870, zoom: 14 };
+  const initialState = { lng: 11.974560, lat: 57.708870, zoom: 14 };  
 
   map.value = new Map({
     container: mapContainer.value,
@@ -104,14 +131,18 @@ onMounted(() => {
     const markerIcon = document.createElement('img');
     markerIcon.src = customMarkerIcon;
     markerIcon.className = 'custom-marker-icon';
+    markerIcon.style.width = '50px'; // Set a fixed width
+    markerIcon.style.height = '50px'; // Set a fixed height
 
     // Append label and custom marker icon to the wrapper
     markerWrapper.appendChild(label);
-    markerWrapper.appendChild(markerIcon);
+   markerWrapper.appendChild(markerIcon);
 
-    const marker = new Marker({ element: markerWrapper })
-      .setLngLat([dentistry.lng, dentistry.lat])
-      .addTo(map.value);
+   const marker = new Marker({ 
+    element: markerWrapper, 
+    anchor: 'bottom' // This sets the anchor to the bottom center of the marker
+  }).setLngLat([dentistry.lng, dentistry.lat])
+    .addTo(map.value);
 
     marker.getElement().addEventListener('click', () => {
       currentDentistry.value = dentistry;
@@ -127,6 +158,7 @@ onUnmounted(() => {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
 .modal .modal-content {
   background: rgba(255, 255, 255, 0.5);
   border-radius: 16px;
@@ -144,11 +176,11 @@ onUnmounted(() => {
 
 .sidebar {
   position: absolute;
-  top: 0; /* Align to the top */
-  left: 0; /* Align to the left */
-  height: 100%; /* Full height of the map area */
-  width: 250px; /* Or whatever width you prefer */
-  z-index: 5; /* Below the button but above the map */
+  top: 0;
+  left: 0; 
+  height: 100%; 
+  width: 250px; 
+  z-index: 5; 
   background-color: rgba(255, 255, 255, 0.5)!important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)!important;
   backdrop-filter: blur(7.7px)!important;
@@ -160,7 +192,18 @@ onUnmounted(() => {
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 10; /* Ensure the button is above the sidebar */
+  z-index: 10; 
+  background-color: rgba(255, 255, 255, 0.5)!important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1)!important;
+  backdrop-filter: blur(7.7px)!important;
+  -webkit-backdrop-filter: blur(7.7px)!important;
+  border: 1px solid rgba(255, 255, 255, 0.68)!important;
+  color: black!important;
+}
+.marker-label {
+  
+  font-family: 'Roboto', sans-serif;
+
 }
 .sidebar ul {
   list-style: none;
@@ -170,9 +213,15 @@ onUnmounted(() => {
 .sidebar ul li {
   cursor: pointer;
   margin-bottom: 10px;
+  border-bottom: 1px solid #000; 
+  padding-bottom: 10px;
 }
 
-
+.distance-text {
+  color: #bc12ff;
+    margin-top: 0px;
+    font-size: small;
+}
 .map {
   width: 100%;
   height: 100%;
@@ -191,8 +240,6 @@ onUnmounted(() => {
 }
 
 .custom-marker-icon {
-  width: 6  0px; 
-  height: 60px; 
 }
 
 
