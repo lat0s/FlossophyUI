@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BModal: typeof import('bootstrap-vue-next')['BModal']
+    BOffcanvas: typeof import('bootstrap-vue-next')['BOffcanvas']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     MapView: typeof import('./src/components/MapView.vue')['default']
   }

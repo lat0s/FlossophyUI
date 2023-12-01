@@ -1,7 +1,16 @@
 <template>
-  <BModal v-model="modal" title="Hello, World!"> Foobar? </BModal>
-  <div class="map-wrap">
-  <div class="map" ref="mapContainer"></div>
+  <BModal v-model="modal" title="Clinic Details"> <!-- Modal -->
+    <p v-if="currentDentistry">Name: {{ currentDentistry.name }}</p>
+    <p v-if="currentDentistry">Address: {{ currentDentistry.address }}</p>
+    <p v-else>No clinic selected</p>
+    <BButton>Book an appointment</BButton>
+  </BModal>
+  <div class="map-wrap"> <!-- Map Wrap -->
+    <BButton @click="click" class="map-button m-2">☰</BButton> <!-- Side Bar Button -->
+    <BOffcanvas v-model="show" :placement="placement" :backdrop="false" no-close-on-backdrop class="sidebar"> <!-- Side Bar -->
+      <p> Test</p>
+    </BOffcanvas>
+  <div class="map" ref="mapContainer"></div> <!-- Map -->
   </div>
 </template>
 
@@ -15,6 +24,14 @@ import customMarkerIcon from '@/assets/marker.png';
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
 const modal = ref(false);
+
+const show = ref(false)
+const placement = ref('start')
+
+const click = (place = 'start') => {
+  placement.value = place
+  show.value = !show.value
+}
 
 const currentDentistry = ref(null);
 
@@ -125,7 +142,26 @@ onUnmounted(() => {
   height: calc(100vh - 77px);
 }
 
+.sidebar {
+  position: absolute;
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  height: 100%; /* Full height of the map area */
+  width: 250px; /* Or whatever width you prefer */
+  z-index: 5; /* Below the button but above the map */
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.7px);
+  -webkit-backdrop-filter: blur(7.7px);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+}
 
+.map-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10; /* Ensure the button is above the sidebar */
+}
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -155,8 +191,8 @@ onUnmounted(() => {
 }
 
 .custom-marker-icon {
-  width: 80px; 
-  height: 80px; 
+  width: 6  0px; 
+  height: 60px; 
 }
 
 
