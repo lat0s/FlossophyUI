@@ -24,9 +24,10 @@
 
 <script setup>
 import { Map, MapStyle, Marker, config } from '@maptiler/sdk';
-import { shallowRef, onMounted, onUnmounted, ref, computed } from 'vue';
+import { shallowRef, onMounted, onUnmounted, ref, computed, watchEffect } from 'vue';
 import '@maptiler/sdk/dist/maptiler-sdk.css';
 import { calculateDistance } from '@/helpers/mapHelper.js';
+import axios from 'axios';
 
 import customMarkerIcon from '@/assets/marker.png';
 
@@ -51,13 +52,23 @@ const click = (place = 'start') => {
 
 const currentDentistry = ref(null);
 
+const dentistryList = ref([]); // Holds the list of clinics fetched from the API
+
+const fetchClinics = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/clinic'); 
+    dentistryList.value = response.data;
+  } catch (error) {
+    console.error('Error fetching clinics:', error);
+  }
+};
+
 const filteredDentistryList = computed(() => {
-  return dentistryTestData.filter((dentistry) =>
+  return dentistryList.value.filter((dentistry) =>
     dentistry.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
     dentistry.address.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
 });
-
 
 const selectDentistry = (dentistry) => {
   currentDentistry.value = dentistry;
@@ -76,36 +87,33 @@ const zoomToDentistry = (dentistry) => {
   }
 };
 
-// TEST 
-// REPLACE WITH REST VALUES!!!!!
-const dentistryTestData = [
-  {
-    id: 1,
-    name: "Dentistry A",
-    lng: 12.964560,
-    lat: 57.708870,
-    address: "Postgatan 9, 41616 Göteborg"
-  },
-  {
-    id: 2,
-    name: "Dentistry B",
-    lng: 11.984560,
-    lat: 57.708870,
-    address: "Burgrevegatan 12, 41616 Göteborg"
-  },
-  {
-    id: 3,
-    name: "Dentistry C",
-    lng: 11.924510,
-    lat: 57.708870,
-    address: "Mejerigatan 20, 41616 Göteborg"
+watchEffect(() => {
+  if (map.value && dentistryList.value.length) {
+    dentistryList.value.forEach(dentistry => {
+      const markerWrapper = document.createElement('div');
+      const label = document.createElement('div');
+      label.className = 'marker-label';
+      label.innerText = dentistry.name;
+
+      const markerIcon = document.createElement('img');
+      markerIcon.src = customMarkerIcon;
+      markerIcon.className = 'custom-marker-icon';
+      markerIcon.style.width = '50px';
+      markerIcon.style.height = '50px';
+
+      markerWrapper.appendChild(label);
+      markerWrapper.appendChild(markerIcon);
+
+      new Marker({ element: markerWrapper, anchor: 'bottom' })
+        .setLngLat([dentistry.lng, dentistry.lat])
+        .addTo(map.value)
+        .getElement().addEventListener('click', () => {
+          currentDentistry.value = dentistry;
+          modal.value = true;
+        });
+    });
   }
-];
-
-
-const isLoggedIn = true;
-
-
+});
 
 onMounted(() => {
   config.apiKey = '3El17jYpkRdshALvcdOY';
@@ -118,44 +126,14 @@ onMounted(() => {
     zoom: initialState.zoom
   });
 
-  dentistryTestData.forEach(dentistry => {
-    // Create a wrapper element for the marker
-    const markerWrapper = document.createElement('div');
-
-    // Create a label element
-    const label = document.createElement('div');
-    label.className = 'marker-label';
-    label.innerText = dentistry.name;
-
-    // Create a custom marker element using the imported image
-    const markerIcon = document.createElement('img');
-    markerIcon.src = customMarkerIcon;
-    markerIcon.className = 'custom-marker-icon';
-    markerIcon.style.width = '50px'; // Set a fixed width
-    markerIcon.style.height = '50px'; // Set a fixed height
-
-    // Append label and custom marker icon to the wrapper
-    markerWrapper.appendChild(label);
-   markerWrapper.appendChild(markerIcon);
-
-   const marker = new Marker({ 
-    element: markerWrapper, 
-    anchor: 'bottom' // This sets the anchor to the bottom center of the marker
-  }).setLngLat([dentistry.lng, dentistry.lat])
-    .addTo(map.value);
-
-    marker.getElement().addEventListener('click', () => {
-      currentDentistry.value = dentistry;
-      modal.value = true; // Open the modal
-    });
-  });
+  fetchClinics(); // Fetch clinics when the component is mounted
 });
-
 
 onUnmounted(() => {
   map.value?.remove();
-})
+});
 </script>
+
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
