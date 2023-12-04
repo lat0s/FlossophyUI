@@ -2,9 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import './style.css';
 import { createRouter, createWebHistory } from 'vue-router';
-import BootstrapVue3 from 'bootstrap-vue-3';
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
-import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 
 import Login from './components/Login.vue';
@@ -13,9 +12,6 @@ import Home from './components/Home.vue'
 
 // Create app instance
 const app = createApp(App);
-
-// Install BootstrapVue3
-app.use(BootstrapVue3);
 
 // Define your routes here
 const routes = [
