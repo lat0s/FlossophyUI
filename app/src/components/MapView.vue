@@ -1,11 +1,13 @@
 <template>
-  <div class="container">
+  <BContainer id="container">
   <BModal v-model="modal" title="Clinic Details"> <!-- Modal -->
     <p v-if="currentDentistry">Name: {{ currentDentistry.name }}</p>
     <p v-if="currentDentistry">Address: {{ currentDentistry.address }}</p>
     <p v-else>No clinic selected</p>
-    <BButton>Book an appointment</BButton>
+    <BButton @click="navigateToBooking(currentDentistry.id)">Book an appointment</BButton>
+
   </BModal>
+  <BRow>
   <div class="map-wrap"> <!-- Map Wrap -->
     <BButton @click="click" class="map-button m-2">☰</BButton> <!-- Side Bar Button -->
     <BOffcanvas v-model="show" :placement="placement" :backdrop="false" no-close-on-backdrop class="sidebar" title="Available Clinics">
@@ -21,7 +23,8 @@
   </BOffcanvas>
   <div class="map" ref="mapContainer"></div> <!-- Map -->
   </div>
-  </div>
+  </BRow>
+</BContainer>
 </template>
 
 <script setup>
@@ -154,6 +157,9 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   height: calc(100vh - 77px);
+  margin-top: 1%;
+  margin-bottom: 1%;
+  
 }
 
 .sidebar {
@@ -219,6 +225,14 @@ onUnmounted(() => {
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
+}
+
+#container{
+background: rgba(156, 160, 162, 0.33);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(8.4px);
+-webkit-backdrop-filter: blur(8.4px);
+border: 1px solid rgba(156, 160, 162, 0.56);
 }
 
 .custom-marker-icon {
