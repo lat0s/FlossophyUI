@@ -1,4 +1,5 @@
 <template>
+  <div class="container">
   <BModal v-model="modal" title="Clinic Details"> <!-- Modal -->
     <p v-if="currentDentistry">Name: {{ currentDentistry.name }}</p>
     <p v-if="currentDentistry">Address: {{ currentDentistry.address }}</p>
@@ -20,6 +21,7 @@
   </BOffcanvas>
   <div class="map" ref="mapContainer"></div> <!-- Map -->
   </div>
+  </div>
 </template>
 
 <script setup>
@@ -30,6 +32,8 @@ import { calculateDistance } from '@/helpers/mapHelper.js';
 import axios from 'axios';
 
 import customMarkerIcon from '@/assets/marker.png';
+
+const isLoggedIn = true; // testing
 
 const mapContainer = shallowRef(null);
 const map = shallowRef(null);
@@ -56,7 +60,7 @@ const dentistryList = ref([]); // Holds the list of clinics fetched from the API
 
 const fetchClinics = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/clinic'); 
+    const response = await axios.get('/api/clinic'); 
     dentistryList.value = response.data;
   } catch (error) {
     console.error('Error fetching clinics:', error);
