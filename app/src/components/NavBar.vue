@@ -7,7 +7,7 @@
   <BNavbarToggle target="nav-collapse" />
   <BCollapse id="nav-collapse" is-nav>
     <BNavbarNav class="w-100 justify-content-center" v-if="isLoggedIn">
-      <BNavItem>Link</BNavItem>
+      <BNavItem href="/map">Map</BNavItem>
       <BNavItem>Link</BNavItem>
       <BNavItem>Link</BNavItem>
     </BNavbarNav>

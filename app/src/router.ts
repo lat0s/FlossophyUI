@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import NotFound from './components/NotFound.vue';
 import Unauthorized from './components/Unauthorized.vue';
+import MapView from './components/MapView.vue';
 
 const routes = [
 //Other routes
@@ -8,6 +9,11 @@ const routes = [
     path: '/unauthorized',
     name: 'Unauthorized',
     component: Unauthorized
+  },
+  {
+    path: '/map',
+    name: 'MapView',
+    component: MapView
   },
   {
     path: '/:catchAll(.*)',
