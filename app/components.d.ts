@@ -8,6 +8,31 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BButton: typeof import('bootstrap-vue-next')['BButton']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    BCol: typeof import('bootstrap-vue-next')['BCol']
+    BCollapse: typeof import('bootstrap-vue-next')['BCollapse']
+    BContainer: typeof import('bootstrap-vue-next')['BContainer']
+    BDropdownItem: typeof import('bootstrap-vue-next')['BDropdownItem']
+    BForm: typeof import('bootstrap-vue-next')['BForm']
+    BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
+    BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
+    BNavbar: typeof import('bootstrap-vue-next')['BNavbar']
+    BNavbarBrand: typeof import('bootstrap-vue-next')['BNavbarBrand']
+    BNavbarNav: typeof import('bootstrap-vue-next')['BNavbarNav']
+    BNavbarToggle: typeof import('bootstrap-vue-next')['BNavbarToggle']
+    BNavItem: typeof import('bootstrap-vue-next')['BNavItem']
+    BNavItemDropdown: typeof import('bootstrap-vue-next')['BNavItemDropdown']
+    Booking: typeof import('./src/components/Booking.vue')['default']
+    BRow: typeof import('bootstrap-vue-next')['BRow']
+    Footer: typeof import('./src/components/Footer.vue')['default']
+    Home: typeof import('./src/components/Home.vue')['default']
+    Login: typeof import('./src/components/Login.vue')['default']
+    Navbar: typeof import('./src/components/Navbar.vue')['default']
+    Profile: typeof import('./src/components/Profile.vue')['default']
+    Registration: typeof import('./src/components/Registration.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+  }
+  export interface ComponentCustomProperties {
+    vBColorMode: typeof import('bootstrap-vue-next')['vBColorMode']
   }
 }
