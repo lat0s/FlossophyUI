@@ -1,5 +1,10 @@
 <template>
-  <div class="registration-container">
+  <div class="split-screen">
+    <div class="left-pane">
+      
+      
+    </div>
+    <div class="right-pane"><div class="registration-container">
     <h2>Sign Up</h2>
     <form class="registration-form" @submit.prevent="submitForm">
       <div class="form-group">
@@ -19,37 +24,86 @@
 
       <button type="submit">Register</button>
     </form>
+  </div></div>
   </div>
 </template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue';
+import axios, { AxiosError } from 'axios';
 
 const fullName = ref('');
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
 
-const submitForm = () => {
-  // TODO -> add submission logic
-  alert(`Registration successful!\nThank you for Signing up.\nName: ${fullName.value}\nEmail: ${email.value}`);
+const submitForm = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/patient', {
+      name: fullName.value,
+      email: email.value,
+      password: password.value
+    });
+
+    if (response.status === 201) {
+      alert('Registration successful! Thank you for signing up.');
+    } else {
+      errorMessage.value = 'Registration failed. Please try again.';
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error as AxiosError;
+      if (serverError.response) {
+        const errorData = serverError.response.data as { Error?: string };
+        errorMessage.value = errorData.Error || 'An error occurred during registration';
+      } else {
+        errorMessage.value = 'An error occurred during registration';
+      }
+    } else {
+      errorMessage.value = 'An unexpected error occurred';
+    }
+  }
 };
 </script>
 
+
+
+
 <style scoped>
+
+.split-screen {
+  display: flex !important;
+  min-height: 100vh !important;
+  position: relative !important;
+}
+
+.left-pane {
+  width: 50% !important;
+  background-color: #9ac5fd !important; 
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px !important;
+}
+
+.right-pane {
+  flex: 1 !important;
+}
+
 .registration-container {
-  background-color: rgba(255, 255, 255, 0.87); /* Match login form background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Match login form shadow */
-  padding: 20px; /* Adjust padding to match login form */
-  border-radius: 4px; /* Match login form border-radius */
-  width: 300px; /* Match login form width */
+  background-color: rgba(255, 255, 255, 0.87); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  padding: 20px;
+  border-radius: 4px; 
+  width: 300px; 
   margin: auto;
+  margin-top: 2cm;
   text-align: center;
 }
 
 .registration-container h2 {
-  font-size: 2em; /* Match login form title size */
+  font-size: 2em; 
   margin-bottom: 20px;
-  color: #333; /* Match login form title color */
+  color: #333; 
 }
 
 .registration-form {
@@ -72,8 +126,8 @@ input {
   width: 100%;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid #ccc; /* Match login form input border */
-  border-radius: 4px; /* Match login form input border-radius */
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
   background-color: #fff;
   color: #333;
 }
@@ -83,18 +137,18 @@ button {
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #9ac5fd; /* Match login form button color */
+  background-color: #9ac5fd; 
   color: white;
   font-size: 16px;
 }
 
 button:hover {
-  background-color: #45a049; /* Optional: Match login form button hover effect */
+  background-color: #45a049; 
 }
 
 @media (max-width: 768px) {
   .registration-container {
-    width: 100%; /* Responsive adjustment */
+    width: 100%; 
   }
 }
 

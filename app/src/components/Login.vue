@@ -1,47 +1,39 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import axios, { AxiosError } from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios, { AxiosError } from 'axios';
+import { login } from '../authState';
 
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const router = useRouter();
 
-  const name = ref('');
-  const password = ref('');
-  const errorMessage = ref('');
-  const router = useRouter();
-  const successMessage = ref(''); 
+const toggleLogin = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/login', {
+      email: email.value,
+      password: password.value
+    });
 
-  const toggleLogin = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/login', {
-        name: name.value,
-        password: password.value,
-      });
-      
-      if (response.data.Authorization === "1") {
-        successMessage.value = 'Login successful!';
-        errorMessage.value = '';
-        router.push('/home');
-      }else {
-        successMessage.value = '';
-        alert('Invalid login credentials'); 
+    if (response.status === 200) {
+      login();
+      router.push('/home');
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      const errorData = error.response.data as { Error?: string };
+      errorMessage.value = errorData.Error || 'An error occurred during login';
+
+     
+      if (errorData.Error?.includes('Wrong email format') || errorData.Error?.includes('Wrong password format')) {
+        alert('Invalid email or password format. Please try again.');
       }
-    } catch (error) {
-        successMessage.value = '';
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-         const errorData = axiosError.response.data as { message?: string };
-          alert(errorData.message || 'An error occurred'); 
-        } else if (axiosError.request) {
-             alert('No response from server'); 
-        } else {
-       alert('Error: ' + axiosError.message);
-       }
-      }
-  };
-
-  const navigateToRegister = () => {
-    router.push('/registration');
-  };
+    } else {
+      errorMessage.value = 'An unexpected error occurred';
+    }
+  }
+};
 </script>
 
 <template>
@@ -49,14 +41,14 @@
     <div class="left-pane">
       <div class="login-container">
         <h1 class="title">Sign in</h1>
-        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <b-form @submit.prevent="toggleLogin" class="login-form">
           <b-form-input
-            id="name"
-            v-model="name"
+            id="email"
+            v-model="email"
+            type="email"
             required
-            placeholder="Name"
+            placeholder="Email"
             class="input-field"
           ></b-form-input>
 
@@ -72,11 +64,14 @@
             Login
           </b-button>
         </b-form>
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <div class="register-link" @click="navigateToRegister">Register</div>
+        <div class="register-link">
+          <router-link to="/registration">Register</router-link>
+        </div>
       </div>
     </div>
-    <div class="right-pane"></div>
+    <div class="right-pane">
+      <!-- Right pane content -->
+    </div>
   </div>
 </template>
 
