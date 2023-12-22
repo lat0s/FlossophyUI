@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import NotFound from './components/NotFound.vue';
 import Unauthorized from './components/Unauthorized.vue';
+import ClinicManagement from './components/ClinicManagement.vue';
+import DentistManagement from './components/DentistManagement.vue';
+import AppointmentManagement from './components/AppointmentManagement.vue';
 
 const routes = [
 //Other routes
@@ -14,6 +17,21 @@ const routes = [
     name: 'NotFound',
     component: NotFound 
   },
+  {
+    path: '/clinics',
+    name: 'ClinicManagement',
+    component: ClinicManagement 
+  },
+  {
+    path: '/dentists',
+    name: 'DentistManagement',
+    component: DentistManagement 
+  },
+  {
+    path: '/appointments',
+    name: 'AppointmentManagement',
+    component: AppointmentManagement
+  }
 ];
 
 const router = createRouter({

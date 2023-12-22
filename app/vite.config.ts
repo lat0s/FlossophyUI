@@ -21,6 +21,16 @@ export default defineConfig({
     Components({
     resolvers: [BootstrapVueNextResolver()],
   }),],
+  server: {
+    proxy: {
+      // Proxying API requests
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   
   resolve: {
     alias: {
