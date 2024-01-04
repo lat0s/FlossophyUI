@@ -4,7 +4,7 @@
     <p v-if="currentDentistry">Name: {{ currentDentistry.name }}</p>
     <p v-if="currentDentistry">Address: {{ currentDentistry.address }}</p>
     <p v-else>No clinic selected</p>
-    <BButton @click="navigateToBooking(currentDentistry.id)">Book an appointment</BButton>
+    <BButton @click="navigateToBooking(currentDentistry._id)">Book an appointment</BButton>
 
   </BModal>
   <BRow>
@@ -33,6 +33,10 @@ import { shallowRef, onMounted, onUnmounted, ref, computed, watchEffect } from '
 import '@maptiler/sdk/dist/maptiler-sdk.css';
 import { calculateDistance } from '@/helpers/mapHelper.js';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+
 
 import customMarkerIcon from '@/assets/marker.png';
 
@@ -47,6 +51,10 @@ const placement = ref('start')
 const searchTerm = ref('');
 
 const userCoordinates = { lat: 57.708870, lng: 11.974560 }; // REPLACE WITH REST VALUES!!!!!
+
+const navigateToBooking = (dentistryId) => {
+  router.push({ name: 'BookingView', params: { id: dentistryId } });
+};
 
 const distanceToDentistry = (dentistry) => {
   return calculateDistance(userCoordinates.lat, userCoordinates.lng, dentistry.lat, dentistry.lng);
