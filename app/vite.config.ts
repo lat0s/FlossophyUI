@@ -5,6 +5,8 @@ import { defineConfig } from "vite"
 import type { UserConfig as VitestUserConfigInterface } from "vitest/config"
 import Components from 'unplugin-vue-components/vite'
 import {BootstrapVueNextResolver} from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import {BootstrapVueNextResolver} from 'unplugin-vue-components/resolvers'
 
 const vitestConfig: VitestUserConfigInterface = {
   test: {
@@ -21,6 +23,16 @@ export default defineConfig({
     Components({
     resolvers: [BootstrapVueNextResolver()],
   }),],
+  server: {
+    proxy: {
+      // Proxying API requests
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   
   resolve: {
     alias: {
