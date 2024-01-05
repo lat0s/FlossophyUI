@@ -39,7 +39,7 @@ function fetchAppointments() {
           const start = new Date(appointment.datetime || appointment.time[0]);
           return {
             start: start,
-            end: new Date(start.getTime() + 60 * 60000), // assuming 60 minutes duration
+            end: new Date(start.getTime() + 60 * 60000), 
             title: appointment.status,
             class: appointment.status === 'Available' ? 'available' : 'booked'
           };
@@ -62,7 +62,7 @@ function fetchAppointments() {
 }
 
 .vuecal--default-theme .vuecal__head {
-  background-color: rgba(128, 0, 128, 0.8); /* Darker purple for header */
+  background-color: rgba(128, 0, 128, 0.8);
   color: white;
 }
 
