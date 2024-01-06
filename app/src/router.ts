@@ -4,6 +4,8 @@ import Unauthorized from './components/Unauthorized.vue';
 import ClinicManagement from './components/ClinicManagement.vue';
 import DentistManagement from './components/DentistManagement.vue';
 import AppointmentManagement from './components/AppointmentManagement.vue';
+import MapView from './components/MapView.vue';
+import BookingView from './components/BookingView.vue';
 
 const routes = [
 //Other routes
@@ -11,6 +13,16 @@ const routes = [
     path: '/unauthorized',
     name: 'Unauthorized',
     component: Unauthorized
+  },
+  {
+    path: '/map',
+    name: 'MapView',
+    component: MapView
+  },
+  {
+    path: '/booking/:id',
+    name: 'BookingView',
+    component: BookingView
   },
   {
     path: '/:catchAll(.*)',
