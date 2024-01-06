@@ -36,10 +36,14 @@ function fetchAppointments() {
       const filteredAppointments = response.data
         .filter(appointment => appointment.clinic && appointment.clinic.toString() === dentistryId.value)
         .map(appointment => {
-          const start = new Date(appointment.datetime || appointment.time[0]);
+          const appointmentDate = new Date(appointment.date);
+          const [hours, minutes] = appointment.time.split(':');
+          appointmentDate.setHours(hours);
+          appointmentDate.setMinutes(minutes);
+
           return {
-            start: start,
-            end: new Date(start.getTime() + 60 * 60000), 
+            start: appointmentDate,
+            end: new Date(appointmentDate.getTime() + 60 * 60000), 
             title: appointment.status,
             class: appointment.status === 'Available' ? 'available' : 'booked'
           };
