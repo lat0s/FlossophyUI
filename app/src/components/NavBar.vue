@@ -8,8 +8,6 @@
   <BCollapse id="nav-collapse" is-nav>
     <BNavbarNav class="w-100 justify-content-center" v-if="isLoggedIn">
       <BNavItem href="/map">Map</BNavItem>
-      <BNavItem>Link</BNavItem>
-      <BNavItem>Link</BNavItem>
     </BNavbarNav>
     <!-- Right aligned nav items -->
     <BNavbarNav class="ms-auto mb-2 mb-lg-0">
@@ -46,5 +44,6 @@ const isLoggedIn = ref(true); //Test ! Fix sometime !
   height: 70px;
   width: 70px;
 }
+
 
 </style>

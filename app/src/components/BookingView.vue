@@ -1,9 +1,8 @@
 <template>
   <div class="calendar-container">
-    <vue-cal :events="appointments" :active-view="month" :disable-views="['years', 'year']" :on-event-click="openModal"></vue-cal>
+    <vue-cal :events="appointments" :active-view="activeView" :disable-views="['years', 'year']" @event-click="openModal"></vue-cal>
   </div>
-  <BModal  v-model="showModal" title="Book Appointment"> Please verify your personal details
-  </BModal>
+  <BModal v-model="showModal" title="Book Appointment">Please verify your personal details</BModal>
 </template>
 
 <script setup>
@@ -14,47 +13,50 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
 const route = useRoute();
-const dentistryId = ref(null);
+const clinicId = ref('');
 const appointments = ref([]);
 const activeView = ref('month');
 const showModal = ref(false);
 
 onMounted(() => {
-  dentistryId.value = route.params.id;
+  clinicId.value = route.params.id;
   fetchAppointments();
 });
-function openModal() {
+
+function openModal(event) {
+  console.log("Event clicked:", event);
   showModal.value = true;
 }
 
-function closeModal() {
-  showModal.value = false;
-}
-function fetchAppointments() {
-  axios.get('/api/appointment')
-    .then(response => {
-      const filteredAppointments = response.data
-        .filter(appointment => appointment.clinic && appointment.clinic.toString() === dentistryId.value)
-        .map(appointment => {
-          const appointmentDate = new Date(appointment.date);
-          const [hours, minutes] = appointment.time.split(':');
-          appointmentDate.setHours(hours);
-          appointmentDate.setMinutes(minutes);
+async function fetchAppointments() {
+  try {
+    const { data } = await axios.get('/api/appointment');
 
-          return {
-            start: appointmentDate,
-            end: new Date(appointmentDate.getTime() + 60 * 60000), 
-            title: appointment.status,
-            class: appointment.status === 'Available' ? 'available' : 'booked'
-          };
-        });
-      appointments.value = filteredAppointments;
-    })
-    .catch(error => {
-      console.error('Error fetching appointments:', error);
+    const filteredAppointments = data.filter(appointment => 
+      appointment.clinic && appointment.clinic.toString() === clinicId.value
+    ).map(appointment => {
+        // Create a date object directly without UTC conversion
+        const start = new Date(`${appointment.date}T${appointment.time}:00`);
+        // Assume each appointment lasts 1 hour for calendar display purposes
+        const end = new Date(start.getTime() + 60 * 60000); // Add 60 minutes
+
+        return {
+          start: start,
+          end: end,
+          title: `${appointment.status}`, // Use dentist's name
+          class: appointment.status === 'Available' ? 'available' : 'booked',
+          data: appointment
+        };
     });
+
+    appointments.value = filteredAppointments;
+  } catch (error) {
+    console.error('Error fetching appointments:', error);
+  }
 }
+
 </script>
+
 
 <style>
 .calendar-container {
