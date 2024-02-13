@@ -6,6 +6,7 @@ import DentistManagement from './components/DentistManagement.vue';
 import AppointmentManagement from './components/AppointmentManagement.vue';
 import MapView from './components/MapView.vue';
 import BookingView from './components/BookingView.vue';
+import HomePage from './components/HomePage.vue';
 
 const routes = [
 //Other routes
@@ -43,6 +44,11 @@ const routes = [
     path: '/appointments',
     name: 'AppointmentManagement',
     component: AppointmentManagement
+  },
+  {
+    path: '/',
+    name: 'HomePage',
+    component: HomePage
   }
 ];
 
