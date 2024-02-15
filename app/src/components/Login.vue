@@ -1,3 +1,37 @@
+<template>
+      <BContainer class="login-container">
+        <h1 class="title">Log in</h1>
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <BForm @submit="doLogin"  class="login-form">
+          <BFormInput
+            id="email"
+            v-model="email"
+            type="email"
+            required
+            placeholder="Email"
+            class="input-field"
+          ></BFormInput>
+
+          <BFormInput
+            id="password"
+            v-model="password"
+            type="password"
+            required
+            placeholder="Password"
+            class="input-field"
+          ></BFormInput>
+          <BButton type="submit" variant="primary" class="login-button">
+            Login
+          </BButton>
+        </BForm>
+        <div class="register-link">
+          <router-link to="/registration">Register</router-link>
+        </div>
+      </BContainer>
+</template>
+
+
+
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -9,17 +43,41 @@ const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-const toggleLogin = async () => {
+const doLogin = async () => {
   try {
-    const response = await axios.post('http://localhost:3000/login', {
+    console.log("Login Called")
+    console.log(email.value,password.value);
+    const response = await axios.post('/api/login', {
       email: email.value,
       password: password.value
+  
     });
 
     if (response.status === 200) {
-      login();
-      router.push('/home');
-    }
+  console.log("Login Successful", response.data);
+
+  // Assuming the response structure is { Authorization: "{\"_id\":\"...\",\"name\":\"...\",\"email\":\"...\"}" }
+  const userDetailsJson = response.data.Authorization;
+  const userDetails = JSON.parse(userDetailsJson);
+
+  // Extract the necessary details
+  const user = {
+    id: userDetails._id, // Assuming _id is the user's ID you want to use
+    name: userDetails.name,
+    email: userDetails.email
+  };
+
+  // Now call the login function with these details
+  login(user); // Update the application state to reflect the user's logged-in status
+
+  // Optionally, redirect the user to the home page or another page as desired
+  router.push('/home');
+
+  console.log("User logged in:", user);
+} else {
+  // Handle other HTTP statuses or errors
+  console.log("Login failed with status:", response.status);
+}
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       const errorData = error.response.data as { Error?: string };
@@ -36,61 +94,13 @@ const toggleLogin = async () => {
 };
 </script>
 
-<template>
-  <div class="split-screen">
-    <div class="left-pane">
-      <div class="login-container">
-        <h1 class="title">Sign in</h1>
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <b-form @submit.prevent="toggleLogin" class="login-form">
-          <b-form-input
-            id="email"
-            v-model="email"
-            type="email"
-            required
-            placeholder="Email"
-            class="input-field"
-          ></b-form-input>
 
-          <b-form-input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            placeholder="Password"
-            class="input-field"
-          ></b-form-input>
-          <b-button type="submit" variant="primary" class="login-button">
-            Login
-          </b-button>
-        </b-form>
-        <div class="register-link">
-          <router-link to="/registration">Register</router-link>
-        </div>
-      </div>
-    </div>
-    <div class="right-pane">
-      <!-- Right pane content -->
-    </div>
-  </div>
-</template>
 
 <style scoped>
-.split-screen {
-  display: flex;
-  min-height: 100vh;
-  position: relative;
-}
-
-.left-pane {
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
 
 .login-container {
+  top: 100px;
+  position: relative;
   max-width: 300px;
   padding: 20px;
   text-align: center;
@@ -100,10 +110,6 @@ const toggleLogin = async () => {
   
 }
 
-.right-pane {
-  flex: 1;
-  background-color: #9ac5fd;
-}
 
 .title {
   font-size: 2em;
@@ -128,10 +134,6 @@ const toggleLogin = async () => {
   color: white;
 }
 
-.success-message {
-  color: #28a745; 
-  margin-top: 10px;}
-
 .error-message {
   color: #ff0000;
   margin-top: 10px;
@@ -143,18 +145,4 @@ const toggleLogin = async () => {
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .split-screen {
-    flex-direction: column;
-  }
-
-  .left-pane,
-  .right-pane {
-    width: 100%;
-  }
-
-  .right-pane {
-    height: 50vh;
-  }
-}
 </style>
