@@ -22,7 +22,9 @@ import { ref } from 'vue';
     backdrop-filter: blur(11.3px)!important;
     -webkit-backdrop-filter: blur(11.3px)!important;
     border: 1px solid rgba(172, 173, 240, 0.6)!important;
-    color: #fff; /* Adjust the text color as needed */
+    color: #fff; 
+    position: relative;
+    top: 59vh;
 }
 
 .footer-text {
