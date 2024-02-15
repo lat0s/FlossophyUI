@@ -56,15 +56,20 @@ const routes = [
     name: 'HomePage',
     component: HomePage
   },
-  { path: '/login', 
+  {
+  path: '/login', 
   component: Login, 
   meta: { guestOnly: true } 
-},
-  { path: '/registration', 
+  },
+ {
+  path: '/registration', 
   component: Registration, 
   meta: { guestOnly: true }
  },
- { path: '/profile', component: Profile, meta: { requiresAuth: true } }
+ { path: '/profile', 
+ component: Profile, 
+ meta: { requiresAuth: true } 
+}
 ];
 
 const router = createRouter({
@@ -72,18 +77,20 @@ const router = createRouter({
   routes
 });
 
-// // Navigation guard !!! IMPLEMENT AUTHENTICATION!!!!!
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     const isAuthenticated = !HERE!
-//     if (!isAuthenticated) {
-//       next({ name: 'Login' });
-//     } else {
-//       next();
-//     }
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = authState.isAuthenticated; // Check the user's auth state
+
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    // If the user is not authenticated and trying to access a protected route
+    next({ name: 'Unauthorized' });
+  } else if (to.matched.some(record => record.meta.guestOnly) && isAuthenticated) {
+    // If the user is authenticated and trying to access a guest-only route (like login or registration)
+    next({ name: 'HomePage' });
+  } else {
+    // Proceed as normal if none of the above conditions are met
+    next();
+  }
+});
+
 
 export default router;

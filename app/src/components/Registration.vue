@@ -1,10 +1,5 @@
 <template>
-  <div class="split-screen">
-    <div class="left-pane">
-      
-      
-    </div>
-    <div class="right-pane"><div class="registration-container">
+<div class="registration-container">
     <h2>Sign Up</h2>
     <form class="registration-form" @submit.prevent="submitForm">
       <div class="form-group">
@@ -24,45 +19,38 @@
 
       <button type="submit">Register</button>
     </form>
-  </div></div>
-  </div>
+    <BModal v-model="showModal" centered title="Registration Successful">
+      User successfully registered, with the following details: 
+      <p>Name: {{ fullName }}</p>
+      <p>Email: {{ email }}</p>
+      <p>Password: {{ password }}</p>
+    </BModal>
+</div>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios, { AxiosError } from 'axios';
 
+const showModal = ref(false);
 const fullName = ref('');
 const email = ref('');
 const password = ref('');
-const errorMessage = ref('');
 
 const submitForm = async () => {
   try {
-    const response = await axios.post('http://localhost:3000/patient', {
+    const response = await axios.post('/api/patient', {
       name: fullName.value,
       email: email.value,
-      password: password.value
+      password: password.value,
     });
-
-    if (response.status === 201) {
-      alert('Registration successful! Thank you for signing up.');
-    } else {
-      errorMessage.value = 'Registration failed. Please try again.';
+    if (response.status === 200) {
+      showModal.value = true;
     }
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const serverError = error as AxiosError;
-      if (serverError.response) {
-        const errorData = serverError.response.data as { Error?: string };
-        errorMessage.value = errorData.Error || 'An error occurred during registration';
-      } else {
-        errorMessage.value = 'An error occurred during registration';
-      }
-    } else {
-      errorMessage.value = 'An unexpected error occurred';
-    }
+    console.error('Registration failed', error);
   }
 };
+
 </script>
 
 
@@ -70,24 +58,6 @@ const submitForm = async () => {
 
 <style scoped>
 
-.split-screen {
-  display: flex !important;
-  min-height: 100vh !important;
-  position: relative !important;
-}
-
-.left-pane {
-  width: 50% !important;
-  background-color: #9ac5fd !important; 
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 20px !important;
-}
-
-.right-pane {
-  flex: 1 !important;
-}
 
 .registration-container {
   background-color: rgba(255, 255, 255, 0.87); 
@@ -152,4 +122,19 @@ button:hover {
   }
 }
 
+p{
+  color: #fafafa;
+  font-size: medium;
+  font-style: normal;
+}
+.modal {
+  display: block; /* Hidden by default. Visible when showModal is true */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+}
 </style>
