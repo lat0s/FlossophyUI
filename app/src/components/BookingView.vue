@@ -2,31 +2,87 @@
   <div class="calendar-container">
     <vue-cal :events="appointments" :active-view="activeView" :disable-views="['years', 'year']" @event-click="openModal"></vue-cal>
   </div>
-  <BModal v-model="showModal" title="Book Appointment">Please verify your personal details</BModal>
+  <BModal v-model="showModal" title="Book Appointment">
+    Please verify your personal details
+    <p>User ID: {{ userId }}</p>
+    <p>User Name: {{ userName }}</p>
+    <p>User Email: {{ userEmail }}</p>
+    <BButton id="bookButton" @click="bookAppointment">Book the appointment</BButton>
+  </BModal>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { authState } from '../authState';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
+const userId = authState.user.id; 
+const userName = authState.user.name; 
+const userEmail = authState.user.email; 
 const route = useRoute();
 const clinicId = ref('');
 const appointments = ref([]);
 const activeView = ref('month');
 const showModal = ref(false);
+// Define a reactive variable for the selected appointment
+var selectedAppointmentID = ref(null);
 
 onMounted(() => {
+  console.log(userId);
   clinicId.value = route.params.id;
   fetchAppointments();
 });
 
-function openModal(event) {
-  console.log("Event clicked:", event);
+// Modify openModal to set selected appointment data
+function openModal(selectedEvent) {
+  console.log("Selected event:", selectedEvent);
+  if (selectedEvent.data.status === 'Booked') {
+    console.log('This appointment is already booked.');
+    return; // Exit the function early if the appointment is booked
+  }
+
+  // Since the appointment data is stored in `selectedEvent.data`, and the ID is `_id`, adjust accordinglyz
+ selectedAppointmentID = selectedEvent.data._id;
   showModal.value = true;
 }
+
+
+
+
+async function bookAppointment() {
+  if (!selectedAppointmentID) {
+    console.error("No appointment selected");
+    return;
+  }
+
+  // Since the ID is stored under '_id', not 'id', adjust the property name accordingly
+  if (!selectedAppointmentID) {
+    console.error("Selected appointment ID is undefined",  selectedAppointmentID);
+    return;
+  }
+
+  console.log("Booking appointment ID:",  selectedAppointmentID);
+
+  // Adjust the URL to use '_id' for the appointment identifier
+  const appointmentUrl = `/api/appointment/${selectedAppointmentID}`;
+  try {
+    const response = await axios.patch(appointmentUrl, {
+      status: "Booked",
+      patient: userId
+    });
+
+    console.log("Appointment booked successfully", response.data);
+    showModal.value = false; // Close the modal after booking
+    fetchAppointments(); // Refresh appointments to reflect the booking
+  } catch (error) {
+    console.error("Error booking the appointment:", error.response ? error.response.data : error);
+  }
+}
+
+
 
 async function fetchAppointments() {
   try {
@@ -35,17 +91,15 @@ async function fetchAppointments() {
     const filteredAppointments = data.filter(appointment => 
       appointment.clinic && appointment.clinic.toString() === clinicId.value
     ).map(appointment => {
-        // Create a date object directly without UTC conversion
         const start = new Date(`${appointment.date}T${appointment.time}:00`);
-        // Assume each appointment lasts 1 hour for calendar display purposes
         const end = new Date(start.getTime() + 60 * 60000); // Add 60 minutes
 
         return {
           start: start,
           end: end,
-          title: `${appointment.status}`, // Use dentist's name
+          title: `${appointment.status}`, // Use appointment status for title
           class: appointment.status === 'Available' ? 'available' : 'booked',
-          data: appointment
+          data: appointment // Store entire appointment object for access on click
         };
     });
 
@@ -54,8 +108,8 @@ async function fetchAppointments() {
     console.error('Error fetching appointments:', error);
   }
 }
-
 </script>
+
 
 
 <style>
@@ -87,6 +141,19 @@ async function fetchAppointments() {
   height: auto;
 
 }
+
+#bookButton{
+  background-color: green;
+  padding: 2px;
+
+}
+
+p{
+  color:red;
+  font-size:large;
+  padding:2px;
+}
+
 
 .vuecal__event {
   border-radius: 0;
