@@ -52,9 +52,14 @@
   .accent-color {
     color: #ff63a5; /* A pinkish tone for important text parts */
   }
-  
+  #footer{
+    position: relative;
+    top: 10vh!important;
+  }
   #homebg {
     background-color: rgba(203, 160, 243, 0.849)!important;
+    height: 100%;
+    width: 100%;
   }
   
   .image-container {
@@ -116,5 +121,6 @@
       max-height: 50vh;
     }
   }
+ 
   </style>
   

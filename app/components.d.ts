@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppointmentManagement: typeof import('./src/components/AppointmentManagement.vue')['default']
+    BAlert: typeof import('bootstrap-vue-next')['BAlert']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCol: typeof import('bootstrap-vue-next')['BCol']
@@ -34,6 +35,7 @@ declare module 'vue' {
     HomePage: typeof import('./src/components/HomePage.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     MapView: typeof import('./src/components/MapView.vue')['default']
+    Navbar: typeof import('./src/components/Navbar.vue')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     NotFound: typeof import('./src/components/NotFound.vue')['default']
     Profile: typeof import('./src/components/Profile.vue')['default']
