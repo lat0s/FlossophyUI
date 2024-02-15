@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Login from './components/Login.vue';
+import Registration from './components/Registration.vue';
+import { authState } from './authState'; 
+import Profile from './components/Profile.vue'
 import NotFound from './components/NotFound.vue';
 import Unauthorized from './components/Unauthorized.vue';
 import ClinicManagement from './components/ClinicManagement.vue';
@@ -18,12 +22,14 @@ const routes = [
   {
     path: '/map',
     name: 'MapView',
-    component: MapView
+    component: MapView,
+    meta: { requiresAuth: true } 
   },
   {
     path: '/booking/:id',
     name: 'BookingView',
-    component: BookingView
+    component: BookingView,
+    meta: { requiresAuth: true } 
   },
   {
     path: '/:catchAll(.*)',
@@ -49,7 +55,16 @@ const routes = [
     path: '/',
     name: 'HomePage',
     component: HomePage
-  }
+  },
+  { path: '/login', 
+  component: Login, 
+  meta: { guestOnly: true } 
+},
+  { path: '/registration', 
+  component: Registration, 
+  meta: { guestOnly: true }
+ },
+ { path: '/profile', component: Profile, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({
