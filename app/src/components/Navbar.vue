@@ -11,8 +11,8 @@
     </BNavbarNav>
     <!-- Right aligned nav items -->
     <BNavbarNav class="ms-auto mb-2 mb-lg-0">
-      <BNavItem href="#">Register</BNavItem>
-      <BNavItem href="#">Login</BNavItem>
+      <BNavItem href="/registration">Register</BNavItem>
+      <BNavItem href="/login">Login</BNavItem>
     </BNavbarNav>
   </BCollapse>
 </BNavbar>
