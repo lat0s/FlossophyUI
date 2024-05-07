@@ -45,45 +45,40 @@ const router = useRouter();
 
 const doLogin = async () => {
   try {
-    console.log("Login Called")
-    console.log(email.value,password.value);
+    console.log("Login Called");
+    console.log(email.value, password.value);
     const response = await axios.post('/api/login', {
       email: email.value,
       password: password.value
-  
     });
 
     if (response.status === 200) {
-  console.log("Login Successful", response.data);
+      console.log("Login Successful", response.data);
 
-  // Assuming the response structure is { Authorization: "{\"_id\":\"...\",\"name\":\"...\",\"email\":\"...\"}" }
-  const userDetailsJson = response.data.Authorization;
-  const userDetails = JSON.parse(userDetailsJson);
+      const userDetails = response.data;
 
-  // Extract the necessary details
-  const user = {
-    id: userDetails._id, // Assuming _id is the user's ID you want to use
-    name: userDetails.name,
-    email: userDetails.email
-  };
+      // Extract the necessary details
+      const user = {
+        id: userDetails._id, 
+        name: userDetails.name,
+        email: userDetails.email
+      };
 
-  // Now call the login function with these details
-  login(user); // Update the application state to reflect the user's logged-in status
+      // Now call the login function with these details
+      login(user); // Update the application state to reflect the user's logged-in status
 
-  // Optionally, redirect the user to the home page or another page as desired
-  router.push('/home');
+      router.push('/');
 
-  console.log("User logged in:", user);
-} else {
-  // Handle other HTTP statuses or errors
-  console.log("Login failed with status:", response.status);
-}
+      console.log("User logged in:", user);
+    } else {
+      // Handle other HTTP statuses or errors
+      console.log("Login failed with status:", response.status);
+    }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       const errorData = error.response.data as { Error?: string };
       errorMessage.value = errorData.Error || 'An error occurred during login';
 
-     
       if (errorData.Error?.includes('Wrong email format') || errorData.Error?.includes('Wrong password format')) {
         alert('Invalid email or password format. Please try again.');
       }
