@@ -1,47 +1,47 @@
 <template>
-      <BContainer class="login-container">
-        <h1 class="title">Log in</h1>
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <BForm @submit="doLogin"  class="login-form">
-          <BFormInput
-            id="email"
-            v-model="email"
-            type="email"
-            required
-            placeholder="Email"
-            class="input-field"
-          ></BFormInput>
+  <BContainer class="login-container">
+    <h1 class="title">Log in</h1>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <BForm @submit="doLogin" class="login-form">
+      <BFormInput
+        id="email"
+        v-model="email"
+        type="email"
+        required
+        placeholder="Email"
+        class="input-field"
+      ></BFormInput>
 
-          <BFormInput
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            placeholder="Password"
-            class="input-field"
-          ></BFormInput>
-          <BButton type="submit" variant="primary" class="login-button">
-            Login
-          </BButton>
-        </BForm>
-        <div class="register-link">
-          <router-link to="/registration">Register</router-link>
-        </div>
-      </BContainer>
+      <BFormInput
+        id="password"
+        v-model="password"
+        type="password"
+        required
+        placeholder="Password"
+        class="input-field"
+      ></BFormInput>
+      <BButton type="submit" variant="primary" class="login-button">
+        Login
+      </BButton>
+    </BForm>
+    <div class="register-link">
+      <router-link to="/registration">Register</router-link>
+    </div>
+  </BContainer>
 </template>
-
-
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios, { AxiosError } from 'axios';
-import { login } from '../authState';
+import axios from 'axios';
+import { useUserStore } from '../stores/userStore';
 
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
+const userStore = useUserStore();
+console.log(userStore._id);
 
 const doLogin = async () => {
   try {
@@ -59,13 +59,13 @@ const doLogin = async () => {
 
       // Extract the necessary details
       const user = {
-        id: userDetails._id, 
+        _id: userDetails._id, 
         name: userDetails.name,
         email: userDetails.email
       };
 
-      // Now call the login function with these details
-      login(user); // Update the application state to reflect the user's logged-in status
+      // Now call the setUser function with these details
+      userStore.setUser(user); // Update the application state to reflect the user's logged-in status
 
       router.push('/');
 
@@ -77,6 +77,7 @@ const doLogin = async () => {
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       const errorData = error.response.data as { Error?: string };
+      console.log("Login failed with error:", errorData.Error || 'An error occurred during login')
       errorMessage.value = errorData.Error || 'An error occurred during login';
 
       if (errorData.Error?.includes('Wrong email format') || errorData.Error?.includes('Wrong password format')) {
@@ -89,10 +90,7 @@ const doLogin = async () => {
 };
 </script>
 
-
-
 <style scoped>
-
 .login-container {
   top: 100px;
   position: relative;
@@ -102,9 +100,7 @@ const doLogin = async () => {
   background-color:  rgba(255, 255, 255, 0.87); 
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
 }
-
 
 .title {
   font-size: 2em;
@@ -139,5 +135,4 @@ const doLogin = async () => {
   color: #000;
   cursor: pointer;
 }
-
 </style>

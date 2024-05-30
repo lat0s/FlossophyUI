@@ -13,15 +13,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { authState } from '../authState';
+import { useUserStore } from '../stores/userStore';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
-const userId = authState.user.id; 
-const userName = authState.user.name; 
-const userEmail = authState.user.email; 
+const userId = useUserStore().id; 
+const userName = useUserStore().name; 
+const userEmail = useUserStore().email; 
 const route = useRoute();
 const clinicId = ref('');
 const appointments = ref([]);
