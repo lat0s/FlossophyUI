@@ -76,6 +76,30 @@ async function bookAppointment() {
 
     console.log("Appointment booked successfully", response.data);
     showModal.value = false; // Close the modal after booking
+     // Send email without awaiting the response
+     const selectedAppointment = await axios.get(`/api/appointment/${selectedAppointmentID}`);
+     const dentistEmail = await axios.get(`/api/dentist/${selectedAppointment.data.dentist}/?fields=email`);
+     const dentistName = await axios.get(`/api/dentist/${selectedAppointment.data.dentist}/?fields=name`);
+     const clinicName = await axios.get(`/api/clinic/${selectedAppointment.data.clinic}/?fields=name`);
+     console.log(dentistEmail.data.email);
+     console.log(clinicName.data.name);
+     console.log(dentistName.data.name);
+     console.log(selectedAppointment);
+     console.log("date",selectedAppointment.data.date);
+     axios.post(`/api/email`, {
+      patientEmail: userEmail,
+      dentistEmail: dentistEmail.data.email,
+      patient: userName,
+      clinic: clinicName.data.name,
+      dentist: dentistName.data.name,
+      date: selectedAppointment.data.date,
+      time: selectedAppointment.data.time,
+      type: 'book'
+    }).then(() => {
+      console.log('Email sent successfully.');
+    }).catch((error) => {
+      console.error('Failed to send email:', error);
+    });
     fetchAppointments(); // Refresh appointments to reflect the booking
   } catch (error) {
     console.error("Error booking the appointment:", error.response ? error.response.data : error);
