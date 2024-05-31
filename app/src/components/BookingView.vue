@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useUserStore } from '../stores/userStore';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
@@ -29,11 +29,17 @@ const activeView = ref('month');
 const showModal = ref(false);
 // Define a reactive variable for the selected appointment
 var selectedAppointmentID = ref(null);
+let intervalId = null;
 
 onMounted(() => {
   console.log(userId);
   clinicId.value = route.params.id;
   fetchAppointments();
+  intervalId = setInterval(fetchAppointments, 10000); // Fetch appointments every 10 seconds
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId); // Clear the interval when the component is destroyed
 });
 
 // Modify openModal to set selected appointment data
@@ -44,62 +50,62 @@ function openModal(selectedEvent) {
     return; // Exit the function early if the appointment is booked
   }
 
-  // Since the appointment data is stored in `selectedEvent.data`, and the ID is `_id`, adjust accordinglyz
- selectedAppointmentID = selectedEvent.data._id;
+  selectedAppointmentID = selectedEvent.data._id;
   showModal.value = true;
 }
-
-
-
 
 async function bookAppointment() {
   if (!selectedAppointmentID) {
     console.error("No appointment selected");
     return;
   }
-
-  // Since the ID is stored under '_id', not 'id', adjust the property name accordingly
-  if (!selectedAppointmentID) {
-    console.error("Selected appointment ID is undefined",  selectedAppointmentID);
-    return;
-  }
-
-  console.log("Booking appointment ID:",  selectedAppointmentID);
-
-  // Adjust the URL to use '_id' for the appointment identifier
+  console.log("Booking appointment ID:", selectedAppointmentID);
   const appointmentUrl = `/api/appointment/${selectedAppointmentID}`;
   try {
     const response = await axios.patch(appointmentUrl, {
       status: "Booked",
       patient: userId
     });
-
     console.log("Appointment booked successfully", response.data);
-    showModal.value = false; // Close the modal after booking
-    fetchAppointments(); // Refresh appointments to reflect the booking
+    showModal.value = false;
+    const selectedAppointment = await axios.get(`/api/appointment/${selectedAppointmentID}`);
+    const dentistEmail = await axios.get(`/api/dentist/${selectedAppointment.data.dentist}/?fields=email`);
+    const dentistName = await axios.get(`/api/dentist/${selectedAppointment.data.dentist}/?fields=name`);
+    const clinicName = await axios.get(`/api/clinic/${selectedAppointment.data.clinic}/?fields=name`);
+    axios.post(`/api/email`, {
+      patientEmail: userEmail,
+      dentistEmail: dentistEmail.data.email,
+      patient: userName,
+      clinic: clinicName.data.name,
+      dentist: dentistName.data.name,
+      date: selectedAppointment.data.date,
+      time: selectedAppointment.data.time,
+      type: 'book'
+    }).then(() => {
+      console.log('Email sent successfully.');
+    }).catch((error) => {
+      console.error('Failed to send email:', error);
+    });
+    fetchAppointments();
   } catch (error) {
     console.error("Error booking the appointment:", error.response ? error.response.data : error);
   }
 }
 
-
-
 async function fetchAppointments() {
   try {
     const { data } = await axios.get('/api/appointment');
-
     const filteredAppointments = data.filter(appointment => 
       appointment.clinic && appointment.clinic.toString() === clinicId.value
     ).map(appointment => {
         const start = new Date(`${appointment.date}T${appointment.time}:00`);
-        const end = new Date(start.getTime() + 60 * 60000); // Add 60 minutes
-
+        const end = new Date(start.getTime() + 60 * 60000);
         return {
           start: start,
           end: end,
-          title: `${appointment.status}`, // Use appointment status for title
+          title: `${appointment.status}`,
           class: appointment.status === 'Available' ? 'available' : 'booked',
-          data: appointment // Store entire appointment object for access on click
+          data: appointment
         };
     });
 
