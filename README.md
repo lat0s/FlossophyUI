@@ -4,4 +4,3 @@
 npm i
 npm run dev
 ```
-## 2) Run start.bat
