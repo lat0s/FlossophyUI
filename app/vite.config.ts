@@ -3,8 +3,7 @@ import { fileURLToPath, URL } from "node:url"
 /// <reference types="vitest" />
 import { defineConfig } from "vite"
 import type { UserConfig as VitestUserConfigInterface } from "vitest/config"
-import Components from 'unplugin-vue-components/vite'
-import {BootstrapVueNextResolver} from 'unplugin-vue-components/resolvers'
+
 import Components from 'unplugin-vue-components/vite'
 import {BootstrapVueNextResolver} from 'unplugin-vue-components/resolvers'
 
