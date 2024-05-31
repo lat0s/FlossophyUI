@@ -19,7 +19,7 @@ import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 
-const userId = useUserStore().id; 
+const userId = useUserStore()._id; 
 const userName = useUserStore().name; 
 const userEmail = useUserStore().email; 
 const route = useRoute();
