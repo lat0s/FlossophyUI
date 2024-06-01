@@ -5,9 +5,6 @@ import Registration from './components/Registration.vue';
 import Profile from './components/Profile.vue';
 import NotFound from './components/NotFound.vue';
 import Unauthorized from './components/Unauthorized.vue';
-import ClinicManagement from './components/ClinicManagement.vue';
-import DentistManagement from './components/DentistManagement.vue';
-import AppointmentManagement from './components/AppointmentManagement.vue';
 import MapView from './components/MapView.vue';
 import BookingView from './components/BookingView.vue';
 import HomePage from './components/HomePage.vue';
@@ -35,21 +32,6 @@ const routes = [
     path: '/:catchAll(.*)',
     name: 'NotFound',
     component: NotFound 
-  },
-  {
-    path: '/clinics',
-    name: 'ClinicManagement',
-    component: ClinicManagement 
-  },
-  {
-    path: '/dentists',
-    name: 'DentistManagement',
-    component: DentistManagement 
-  },
-  {
-    path: '/appointments',
-    name: 'AppointmentManagement',
-    component: AppointmentManagement
   },
   {
     path: '/',
