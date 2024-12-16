@@ -1,5 +1,5 @@
 <template>
-<div class="registration-container">
+  <div class="registration-container">
     <h2>Sign Up</h2>
     <form class="registration-form" @submit.prevent="submitForm">
       <div class="form-group">
@@ -25,16 +25,19 @@
       <p>Email: {{ email }}</p>
       <p>Password: {{ password }}</p>
     </BModal>
-</div>
+  </div>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import axios, { AxiosError } from 'axios';
 
 const showModal = ref(false);
 const fullName = ref('');
 const email = ref('');
 const password = ref('');
+const router = useRouter();
 
 const submitForm = async () => {
   try {
@@ -43,22 +46,20 @@ const submitForm = async () => {
       email: email.value,
       password: password.value,
     });
-    if (response.status === 200) {
+    if (response.status === 201) {
       showModal.value = true;
+
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     }
   } catch (error) {
     console.error('Registration failed', error);
   }
 };
-
 </script>
 
-
-
-
 <style scoped>
-
-
 .registration-container {
   background-color: rgba(255, 255, 255, 0.87); 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
@@ -122,19 +123,9 @@ button:hover {
   }
 }
 
-p{
+p {
   color: #fafafa;
   font-size: medium;
   font-style: normal;
-}
-.modal {
-  display: block; /* Hidden by default. Visible when showModal is true */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
 }
 </style>
