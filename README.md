@@ -38,14 +38,14 @@
   <p align="center">
     🪶RESTAPI for Flossophy using Koa.js and MongoDB.
     <br />
-    <a href="https://github.com/lat0s/FlossophyREST"><strong>Explore the docs (!WIP!) »</strong></a>
+    <a href="https://github.com/lat0s/FlossophyUserInterface"><strong>Explore the docs (!WIP!) »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/lat0s/FlossophyREST">View Demo (!WIP!) </a>
+    <a href="https://github.com/lat0s/FlossophyUserInterface">View Demo (!WIP!) </a>
     ·
-    <a href="https://github.com/lat0s/FlossophyREST/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/lat0s/FlossophyUserInterface/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/lat0s/FlossophyREST/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/lat0s/FlossophyUserInterface/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -162,7 +162,7 @@ This REST API is intented for usage within the Flossophy Full-Stack Project (!WI
 
 - [ ] N/A
 
-See the [open issues](https://github.com/lat0s/FlossophyREST/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/lat0s/FlossophyUserInterface/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -198,7 +198,7 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 X - [@lat0ss](https://twitter.com/lat0ss)
 Discord - [@lesbiathan](https://discord.com/users/989771998899109951)
 
-Project Link: [https://github.com/lat0s/FlossophyREST](https://github.com/lat0s/FlossophyREST)
+Project Link: [https://github.com/lat0s/FlossophyREST](https://github.com/lat0s/FlossophyUserInterface)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
