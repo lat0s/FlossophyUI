@@ -5,17 +5,28 @@
         "es2022": true,
         "node": true
     },
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2022,
+        "sourceType": "module"
+    },
     "extends": [
-        "plugin:vue/vue3-recommended",
         "eslint:recommended",
-        "@vue/typescript/recommended",
+        "plugin:vue/vue3-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": [
+        "vue",
+        "@typescript-eslint",
         "prettier"
     ],
-    "parserOptions": {
-        "ecmaVersion": 2022
-    },
-    "plugins": [],
     "rules": {
-        "semi": ["warn", "never"]
+        "prettier/prettier": "error",
+        "no-var": "error",
+        "vue/no-ref-as-operand": "error",
+        "@typescript-eslint/semi": ["error", "always"],
+        "semi": "off"
     }
 }

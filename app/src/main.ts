@@ -28,11 +28,11 @@ userStore.$subscribe(() => {
 });
 app.mount('#app');
 async function fetchUserData() {
-    try {
-      const response = await axios.get(`/api/patient/${userStore._id}`);
-      const user = response.data;
-      userStore.setUser(user);
-    } catch (error) {
-      console.error('Failed to fetch user data:', error);
-    }
+  try {
+    const response = await axios.get(`/api/patient/${userStore._id}`);
+    const user = response.data;
+    userStore.setUser(user);
+  } catch (error) {
+    console.error('Failed to fetch user data:', error);
   }
+}

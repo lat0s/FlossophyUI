@@ -14,60 +14,66 @@ const routes = [
   {
     path: '/unauthorized',
     name: 'Unauthorized',
-    component: Unauthorized
+    component: Unauthorized,
   },
   {
     path: '/map',
     name: 'MapView',
     component: MapView,
-    meta: { requiresAuth: true } 
+    meta: { requiresAuth: true },
   },
   {
     path: '/booking/:id',
     name: 'BookingView',
     component: BookingView,
-    meta: { requiresAuth: true } 
+    meta: { requiresAuth: true },
   },
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
-    component: NotFound 
+    component: NotFound,
   },
   {
     path: '/',
     name: 'HomePage',
-    component: HomePage
+    component: HomePage,
   },
   {
     path: '/login',
     component: Login,
-    meta : { guestOnly: true }
+    meta: { guestOnly: true },
   },
   {
-    path: '/registration', 
-    component: Registration, 
-    meta: { guestOnly: true }
+    path: '/registration',
+    component: Registration,
+    meta: { guestOnly: true },
   },
   {
-    path: '/profile', 
-    component: Profile, 
-    meta: { requiresAuth: true } 
-  }
+    path: '/profile',
+    component: Profile,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory('/'),
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   const isAuthenticated = userStore.isAuthenticated(); // Check the user's auth state
 
-  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+  if (
+    to.matched.some((record) => record.meta.requiresAuth) &&
+    !isAuthenticated
+  ) {
     // If the user is not authenticated and trying to access a protected route
     next({ name: 'Unauthorized' });
-  } else if (to.matched.some(record => record.meta.guestOnly) && isAuthenticated) {
+  } else if (
+    to.matched.some((record) => record.meta.guestOnly) &&
+    isAuthenticated
+  ) {
     // If the user is authenticated and trying to access a guest-only route (like login or registration)
     next({ name: 'HomePage' });
   } else {
