@@ -172,7 +172,7 @@ http://localhost:5173
 [stars-url]: https://github.com/lat0s/FlossophyUserInterface/stargazers
 [issues-shield]: https://img.shields.io/github/issues/lat0s/FlossophyUserInterface.svg?style=for-the-badge
 [issues-url]: https://github.com/lat0s/FlossophyUserInterface/issues
-[license-shield]: https://img.shields.io/github/license/lat0s/FlossophyRUserInterface.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/lat0s/FlossophyUserInterface.svg?style=for-the-badge
 [license-url]: https://github.com/lat0s/FlossophyUserInterface/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/latosgeorge
