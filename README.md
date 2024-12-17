@@ -38,7 +38,7 @@
 <h3 align="center">Flossophy User Interface</h3>
 
   <p align="center">
-    🪶 A modern dental care application interface built with Vue.js and BootstrapVue Next.
+    🪥 A modern dental care application interface built with Vue.js and BootstrapVue Next.
     <br />
     <a href="https://github.com/lat0s/FlossophyUserInterface"><strong>Explore the docs (!WIP!) »</strong></a>
     <br />
