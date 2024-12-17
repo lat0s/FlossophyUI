@@ -4,7 +4,6 @@
     v-b-color-mode="'dark'"
     toggleable="lg"
     variant="primary"
-    sticky="top"
   >
     <BNavbarBrand href="/">
       <img src="../assets/logonobg.png" class="brandimage" />
