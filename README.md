@@ -119,7 +119,7 @@ Follow these instructions to set up the Flossophy User Interface locally.
 
 - [Node.js](https://nodejs.org/en) Latest Version
 - A running **Backend API**.
-  - Specifically made for this [project](https://github.com/lat0s/FlossophyREST/tree/main).
+  - Specifically made for this [project](https://github.com/lat0s/FlossophyUserInterface/tree/main).
 
 ### Installation
 
