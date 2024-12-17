@@ -24,9 +24,9 @@
       </BForm>
       <BButton variant="success" @click="submitEdit">Save</BButton>
     </BModal>
-    <BRow
-      ><span><h1></h1></span
-    ></BRow>
+    <BRow>
+      <span><h1></h1></span>
+    </BRow>
     <BRow>
       <BButton variant="danger" @click="logoutUser">Logout</BButton>
     </BRow>
@@ -103,29 +103,49 @@
     try {
       console.log('Fetching appointments...');
       const response = await axios.get('/api/appointment');
-      appointments.value = response.data;
+
+      // Ensure response contains an array
+      if (Array.isArray(response.data.appointments)) {
+        appointments.value = response.data.appointments;
+      } else {
+        appointments.value = [];
+        console.warn(
+          'API response is not an array. Setting appointments to []'
+        );
+      }
+
       console.log('Appointments fetched:', appointments.value);
       await fetchAdditionalDetails();
       filterAppointments();
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
+      appointments.value = []; // Ensure it is reset to an empty array on failure
     }
   };
 
   const fetchAdditionalDetails = async () => {
     try {
+      if (!Array.isArray(appointments.value)) {
+        console.error('Appointments is not an array.');
+        return;
+      }
+
       const detailsPromises = appointments.value.map(async (appointment) => {
-        const dentistUrl = `/api/dentist/${appointment.dentist}/?fields=name,email`;
-        const clinicUrl = `/api/clinic/${appointment.clinic}/?fields=name`;
+        const dentistId = appointment.dentist?._id || appointment.dentist; // Extract ID safely
+        const clinicId = appointment.clinic?._id || appointment.clinic;
+
+        const dentistUrl = `/api/dentist/${dentistId}?fields=name,email`;
+        const clinicUrl = `/api/clinic/${clinicId}?fields=name`;
 
         const [dentistData, clinicData] = await Promise.all([
           fetchWithCache(dentistUrl),
           fetchWithCache(clinicUrl),
         ]);
 
-        appointment.dentistName = dentistData.name;
-        appointment.dentistEmail = dentistData.email;
-        appointment.clinicName = clinicData.name;
+        // Assign fetched data back to appointment
+        appointment.dentistName = dentistData?.name || 'Unknown Dentist';
+        appointment.dentistEmail = dentistData?.email || 'No Email';
+        appointment.clinicName = clinicData?.name || 'Unknown Clinic';
       });
 
       await Promise.all(detailsPromises);
@@ -136,9 +156,16 @@
   };
 
   const filterAppointments = () => {
+    if (!Array.isArray(appointments.value)) {
+      console.error('Appointments is not an array.');
+      filteredAppointments.value = [];
+      return;
+    }
+
     filteredAppointments.value = appointments.value.filter(
-      (appointment) => appointment.patient === userStore._id
+      (appointment) => appointment.patient?._id === userStore._id
     );
+
     console.log('Filtered appointments:', filteredAppointments.value);
   };
 
@@ -220,7 +247,7 @@
 
       // Send email without awaiting the response
       axios
-        .post(`/api/email`, {
+        .post(`/api/send-email`, {
           patientEmail: userStore.email,
           dentistEmail: selectedAppointment.value.dentistEmail,
           patient: userStore.name,
