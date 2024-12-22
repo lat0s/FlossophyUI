@@ -37,6 +37,12 @@
 
 <h3 align="center">Flossophy User Interface</h3>
 
+#
+
+<h3>❗ STILL WIP FEW ISSUES EXIST ❗</h3>
+
+#
+
   <p align="center">
     🪥 A modern dental care application interface built with Vue.js and BootstrapVue Next.
     <br />
