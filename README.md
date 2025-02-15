@@ -31,7 +31,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/lat0s/FlossophyUserInterface">
+  <a href="https://github.com/lat0s/FlossophyUI">
     <img src="assets/flossophy.png" alt="Logo" width="256" height="256">
   </a>
 
@@ -46,14 +46,14 @@
   <p align="center">
     🪥 A modern dental care application interface built with Vue.js and BootstrapVue Next.
     <br />
-    <a href="https://github.com/lat0s/FlossophyUserInterface"><strong>Explore the docs (!WIP!) »</strong></a>
+    <a href="https://github.com/lat0s/FlossophyUI"><strong>Explore the docs (!WIP!) »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/lat0s/FlossophyUserInterface">View Demo (!WIP!)</a>
+    <a href="https://github.com/lat0s/FlossophyUI">View Demo (!WIP!)</a>
     ·
-    <a href="https://github.com/lat0s/FlossophyUserInterface/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/lat0s/FlossophyUI/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     ·
-    <a href="https://github.com/lat0s/FlossophyUserInterface/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/lat0s/FlossophyUI/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -125,13 +125,13 @@ Follow these instructions to set up the Flossophy User Interface locally.
 
 - [Node.js](https://nodejs.org/en) Latest Version
 - A running **Backend API**.
-  - Specifically made for this [project](https://github.com/lat0s/FlossophyUserInterface/tree/main).
+  - Specifically made for this [project](https://github.com/lat0s/FlossophyUI/tree/main).
 
 ### Installation
 
 1. Clone the repo:
 ```sh
-git clone https://github.com/lat0s/FlossophyUserInterface.git
+git clone https://github.com/lat0s/FlossophyUI.git
 ```
 2. Navigate to the project directory:
 ```sh
@@ -170,16 +170,16 @@ http://localhost:5173
 [Node-url]: https://nodejs.org/en
 [Koa-url]: https://koajs.com/
 [Koa]: https://img.shields.io/badge/Koa-33333D?logo=koa&logoColor=fff&style=flat-square
-[contributors-shield]: https://img.shields.io/github/contributors/lat0s/FlossophyUserInterface.svg?style=for-the-badge
-[contributors-url]: https://github.com/lat0s/FlossophyUserInterface/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/lat0s/FlossophyUserInterface.svg?style=for-the-badge
-[forks-url]: https://github.com/lat0s/FlossophyUserInterface/network/members
-[stars-shield]: https://img.shields.io/github/stars/lat0s/FlossophyUserInterface.svg?style=for-the-badge
-[stars-url]: https://github.com/lat0s/FlossophyUserInterface/stargazers
-[issues-shield]: https://img.shields.io/github/issues/lat0s/FlossophyUserInterface.svg?style=for-the-badge
-[issues-url]: https://github.com/lat0s/FlossophyUserInterface/issues
-[license-shield]: https://img.shields.io/github/license/lat0s/FlossophyUserInterface.svg?style=for-the-badge
-[license-url]: https://github.com/lat0s/FlossophyUserInterface/blob/main/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/lat0s/FlossophyUI.svg?style=for-the-badge
+[contributors-url]: https://github.com/lat0s/FlossophyUI/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/lat0s/FlossophyUI.svg?style=for-the-badge
+[forks-url]: https://github.com/lat0s/FlossophyUI/network/members
+[stars-shield]: https://img.shields.io/github/stars/lat0s/FlossophyUI.svg?style=for-the-badge
+[stars-url]: https://github.com/lat0s/FlossophyUI/stargazers
+[issues-shield]: https://img.shields.io/github/issues/lat0s/FlossophyUI.svg?style=for-the-badge
+[issues-url]: https://github.com/lat0s/FlossophyUI/issues
+[license-shield]: https://img.shields.io/github/license/lat0s/FlossophyUI.svg?style=for-the-badge
+[license-url]: https://github.com/lat0s/FlossophyUI/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/latosgeorge
 [product-screenshot]: images/screenshot.png
