@@ -1,27 +1,29 @@
-import { fileURLToPath, URL } from "node:url"
+import { fileURLToPath, URL } from 'node:url';
 
 /// <reference types="vitest" />
-import { defineConfig } from "vite"
-import type { UserConfig as VitestUserConfigInterface } from "vitest/config"
+import { defineConfig } from 'vite';
+import type { UserConfig as VitestUserConfigInterface } from 'vitest/config';
 
-import Components from 'unplugin-vue-components/vite'
-import {BootstrapVueNextResolver} from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite';
+import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers';
 
 const vitestConfig: VitestUserConfigInterface = {
   test: {
     globals: true,
-    environment: "jsdom",
+    environment: 'jsdom',
   },
-}
+};
 
-import vue from "@vitejs/plugin-vue"
+import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(),
+  plugins: [
+    vue(),
     Components({
-    resolvers: [BootstrapVueNextResolver()],
-  }),],
+      resolvers: [BootstrapVueNextResolver()],
+    }),
+  ],
   server: {
     proxy: {
       // Proxying API requests
@@ -32,11 +34,11 @@ export default defineConfig({
       },
     },
   },
-  
+
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   test: vitestConfig.test,
-})
+});

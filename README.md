@@ -91,6 +91,7 @@
 
 ## About The Project
 
+### Attention ⚠️ It won't work without additional configuration and an API, unless you use [this one](https://github.com/lat0s/FlossophyREST) i made specifically for Flossophy if you want to test everything.
 Flossophy User Interface is the frontend of a modern dental care application. It allows patients to:
 
 - Register / Login.
@@ -102,6 +103,7 @@ Flossophy User Interface is the frontend of a modern dental care application. It
 
 
 The UI is built with **Vue.js 3** and **BootstrapVue Next**, ensuring a smooth and responsive user experience.
+
 
 ---
 
@@ -125,7 +127,7 @@ Follow these instructions to set up the Flossophy User Interface locally.
 
 - [Node.js](https://nodejs.org/en) Latest Version
 - A running **Backend API**.
-  - Specifically made for this [project](https://github.com/lat0s/FlossophyUI/tree/main).
+  - I made one specifically for this project. [Here!](https://github.com/lat0s/FlossophyREST).
 
 ### Installation
 
@@ -142,12 +144,13 @@ cd app
 ```sh
 npm install
 ```
-4. Run the development server:
+4. Make sure in `vite.config.ts` points to the correct location of the API!!! If nothing goes wrong, and you were to use [this](https://github.com/lat0s/FlossophyREST) it should seamlessly work.
+5. Run the development server:
 ```sh
 npm run dev
 ```
 
-5. Open the application:
+6. Open the application:
 ```sh
 http://localhost:5173
 ```

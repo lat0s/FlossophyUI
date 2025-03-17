@@ -103,49 +103,29 @@
     try {
       console.log('Fetching appointments...');
       const response = await axios.get('/api/appointment');
-
-      // Ensure response contains an array
-      if (Array.isArray(response.data.appointments)) {
-        appointments.value = response.data.appointments;
-      } else {
-        appointments.value = [];
-        console.warn(
-          'API response is not an array. Setting appointments to []'
-        );
-      }
-
+      appointments.value = response.data;
       console.log('Appointments fetched:', appointments.value);
       await fetchAdditionalDetails();
       filterAppointments();
     } catch (error) {
       console.error('Failed to fetch appointments:', error);
-      appointments.value = []; // Ensure it is reset to an empty array on failure
     }
   };
 
   const fetchAdditionalDetails = async () => {
     try {
-      if (!Array.isArray(appointments.value)) {
-        console.error('Appointments is not an array.');
-        return;
-      }
-
       const detailsPromises = appointments.value.map(async (appointment) => {
-        const dentistId = appointment.dentist?._id || appointment.dentist; // Extract ID safely
-        const clinicId = appointment.clinic?._id || appointment.clinic;
-
-        const dentistUrl = `/api/dentist/${dentistId}?fields=name,email`;
-        const clinicUrl = `/api/clinic/${clinicId}?fields=name`;
+        const dentistUrl = `/api/dentist/${appointment.dentist}?fields=name,email`;
+        const clinicUrl = `/api/clinic/${appointment.clinic}?fields=name`;
 
         const [dentistData, clinicData] = await Promise.all([
           fetchWithCache(dentistUrl),
           fetchWithCache(clinicUrl),
         ]);
 
-        // Assign fetched data back to appointment
-        appointment.dentistName = dentistData?.name || 'Unknown Dentist';
-        appointment.dentistEmail = dentistData?.email || 'No Email';
-        appointment.clinicName = clinicData?.name || 'Unknown Clinic';
+        appointment.dentistName = dentistData.name;
+        appointment.dentistEmail = dentistData.email;
+        appointment.clinicName = clinicData.name;
       });
 
       await Promise.all(detailsPromises);
@@ -156,16 +136,9 @@
   };
 
   const filterAppointments = () => {
-    if (!Array.isArray(appointments.value)) {
-      console.error('Appointments is not an array.');
-      filteredAppointments.value = [];
-      return;
-    }
-
     filteredAppointments.value = appointments.value.filter(
-      (appointment) => appointment.patient?._id === userStore._id
+      (appointment) => appointment.patient === userStore._id
     );
-
     console.log('Filtered appointments:', filteredAppointments.value);
   };
 
@@ -223,7 +196,18 @@
       showModal.value = false;
       console.log('User details updated successfully.');
     } catch (error) {
-      console.error('Failed to update user details:', error);
+      if (
+        error.response &&
+        error.response.status === 500 &&
+        error.response.data.message.includes('duplicate key error')
+      ) {
+        console.error('Email already exists:', error.response.data.message);
+        alert(
+          'The email address is already in use. Please use a different email.'
+        );
+      } else {
+        console.error('Failed to update user details:', error);
+      }
     }
   };
 
@@ -250,9 +234,9 @@
         .post(`/api/send-email`, {
           patientEmail: userStore.email,
           dentistEmail: selectedAppointment.value.dentistEmail,
-          patient: userStore.name,
-          clinic: selectedAppointment.value.clinicName,
-          dentist: selectedAppointment.value.dentistName,
+          patientName: userStore.name,
+          clinicName: selectedAppointment.value.clinicName,
+          dentistName: selectedAppointment.value.dentistName,
           date: selectedAppointment.value.date,
           time: selectedAppointment.value.time,
           type: 'cancel',

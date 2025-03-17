@@ -1,34 +1,37 @@
 <template>
-  <BContainer class="login-container">
-    <h1 class="title">Log in</h1>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <BForm class="login-form" @submit="doLogin">
-      <BFormInput
-        id="email"
-        v-model="email"
-        type="email"
-        required
-        placeholder="Email"
-        class="input-field"
-      ></BFormInput>
+  <div class="wrap">
+    <BContainer class="login-container">
+      <h1 class="title">Log in</h1>
+      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <BForm class="login-form" @submit="doLogin">
+        <BFormInput
+          id="email"
+          v-model="email"
+          type="email"
+          required
+          placeholder="Email"
+          class="input-field"
+        ></BFormInput>
 
-      <BFormInput
-        id="password"
-        v-model="password"
-        type="password"
-        required
-        placeholder="Password"
-        class="input-field"
-      ></BFormInput>
-      <BButton type="submit" variant="primary" class="login-button">
-        Login
-      </BButton>
-    </BForm>
-    <div class="register-link">
-      <router-link to="/registration">Register</router-link>
-    </div>
-  </BContainer>
+        <BFormInput
+          id="password"
+          v-model="password"
+          type="password"
+          required
+          placeholder="Password"
+          class="input-field"
+        ></BFormInput>
+        <BButton type="submit" variant="primary" class="login-button">
+          Login
+        </BButton>
+      </BForm>
+      <div class="register-link">
+        <router-link to="/registration">Register</router-link>
+      </div>
+    </BContainer>
+  </div>
 </template>
+
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
@@ -106,11 +109,17 @@
 </script>
 
 <style scoped>
+  .wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 76vh;
+    background-color: #f5f5f533;
+  }
   .login-container {
-    top: 100px;
     position: relative;
     max-width: 300px;
-    padding: 20px;
+    padding: px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.87);
     border-radius: 4px;

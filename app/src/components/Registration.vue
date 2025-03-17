@@ -30,6 +30,9 @@
       </div>
 
       <button type="submit">Register</button>
+      <div class="login-link">
+        <router-link to="/login">Login</router-link>
+      </div>
     </form>
     <BModal v-model="showModal" centered title="Registration Successful">
       User successfully registered, with the following details:
